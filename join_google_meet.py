@@ -22,6 +22,7 @@ class JoinGoogleMeet:
         opt = Options()
         opt.add_argument('--disable-blink-features=AutomationControlled')
         opt.add_argument('--start-maximized')
+        opt.add_argument('--disable-bluetooth')
         opt.add_experimental_option("prefs", {
             "profile.default_content_setting_values.media_stream_mic": 1,
             "profile.default_content_setting_values.media_stream_camera": 1,
@@ -54,17 +55,18 @@ class JoinGoogleMeet:
     def turnOffMicCam(self, meet_link):
         # Navigate to Google Meet URL
         self.driver.get(meet_link)
+        self.driver.refresh()
         # turn off Microphone
         time.sleep(2)
-        self.driver.find_element(By.CSS_SELECTOR, 'div[jscontroller="t2mBxb"][data-anchor-id="hw0c9"]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="yDmH0d"]/c-wiz/div/div/div[38]/div[4]/div/div[2]/div[4]/div/div/div[1]/div[1]/div/div[7]/div[1]/div/div/div/div/div[1]').click()
         self.driver.implicitly_wait(3000)
         print("Turn of mic activity: Done")
-    
-        # turn off camera
-        time.sleep(1)
-        self.driver.find_element(By.CSS_SELECTOR, 'div[jscontroller="bwqwSd"][data-anchor-id="psRWwc"]').click()
-        self.driver.implicitly_wait(3000)
-        print("Turn of camera activity: Done")
+    #
+       ## turn off camera
+       #time.sleep(2)
+       #self.driver.find_element(By.XPATH, '').click()
+       #self.driver.implicitly_wait(3000)
+       #print("Turn of camera activity: Done")
  
     def checkIfJoined(self):
         try:
@@ -78,17 +80,19 @@ class JoinGoogleMeet:
     
     def AskToJoin(self, audio_path, duration):
         # Ask to Join meet
-        time.sleep(5)
+        time.sleep(3)
         self.driver.implicitly_wait(2000)
-        self.driver.find_element(By.CSS_SELECTOR, 'button[jsname="Qx7uuf"]').click()
+        self.driver.find_element(By.CSS_SELECTOR, 'button[jslog="227430; track:click"]').click()
         print("Ask to join activity: Done")
-        # checkIfJoined()
+        #checkIfJoined()
         # Ask to join and join now buttons have same xpaths
         AudioRecorder().get_audio(audio_path, duration)
 
 def main():
+    print("Google Meet Joiner")
     temp_dir = tempfile.mkdtemp()
     audio_path = os.path.join(temp_dir, "output.wav")
+    print(f"Audio will be recorded in {temp_dir}")
     # Get configuration from environment variables
     meet_link = os.getenv('MEET_LINK')
     duration = int(os.getenv('RECORDING_DURATION', 60))
