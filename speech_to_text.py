@@ -141,13 +141,21 @@ class SpeechToText:
             json.dump(data, f)
         print("JSON file created successfully.")
 
+    def store_in_text_file(self, data):
+        temp_dir = tempfile.mkdtemp()
+        file_path = os.path.join(temp_dir, f'meeting_data_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.txt')
+        print(f"Text file path: {file_path}")
+        with open(file_path, 'w') as f:
+            f.write(data)
+        print("Text file created successfully.")
+
     def transcribe(self, audio_file_path):
         audio_file_path = self.resize_audio_if_needed(audio_file_path)
         transcription = self.transcribe_audio(audio_file_path)
-        summary = self.meeting_minutes(transcription)
-        self.store_in_json_file(summary)
+        #summary = self.meeting_minutes(transcription)
+        self.store_in_text_file(transcription)
     
-        print(f"Abstract Summary: {summary['abstract_summary']}")
-        print(f"Key Points: {summary['key_points']}")
-        print(f"Action Items: {summary['action_items']}")
-        print(f"Sentiment: {summary['sentiment']}")
+       # print(f"Abstract Summary: {summary['abstract_summary']}")
+       # print(f"Key Points: {summary['key_points']}")
+       # print(f"Action Items: {summary['action_items']}")
+       # print(f"Sentiment: {summary['sentiment']}")

@@ -78,7 +78,7 @@ class JoinGoogleMeet:
         except (TimeoutException, NoSuchElementException):
             print("Meeting has not been joined")
     
-    def AskToJoin(self, audio_path, duration):
+    def AskToJoin(self, audio_path1, audio_path2 ,duration):
         # Ask to Join meet
         time.sleep(3)
         self.driver.implicitly_wait(2000)
@@ -86,12 +86,14 @@ class JoinGoogleMeet:
         print("Ask to join activity: Done")
         #checkIfJoined()
         # Ask to join and join now buttons have same xpaths
-        AudioRecorder().get_audio(audio_path, duration)
+        AudioRecorder().get_audio(audio_path1, duration)
+        AudioRecorder().get_audio(audio_path2, duration)
 
 def main():
     print("Google Meet Joiner")
     temp_dir = tempfile.mkdtemp()
-    audio_path = os.path.join(temp_dir, "output.wav")
+    audio_path1 = os.path.join(r"C:\\Users\\desarrollo\\Documents\\Grabaciones", "output1.wav")
+    audio_path2 = os.path.join(r"C:\\Users\\desarrollo\\Documents\\Grabaciones", "output2.wav")
     print(f"Audio will be recorded in {temp_dir}")
     # Get configuration from environment variables
     meet_link = os.getenv('MEET_LINK')
@@ -100,8 +102,9 @@ def main():
     obj = JoinGoogleMeet()
     obj.Glogin()
     obj.turnOffMicCam(meet_link)
-    obj.AskToJoin(audio_path, duration)
-    SpeechToText().transcribe(audio_path)
+    obj.AskToJoin(audio_path1, audio_path2, duration)
+    SpeechToText().transcribe(audio_path1)
+    SpeechToText().transcribe(audio_path2)
 
 #call the main function
 if __name__ == "__main__":

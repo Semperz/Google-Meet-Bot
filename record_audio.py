@@ -17,7 +17,7 @@ class AudioRecorder:
         print("Recording...")
         print(f"Using device: {device_info['name']}")
         print(f"Devices available: {sd.query_devices()}")
-        recording = sd.rec(int(duration * self.sample_rate), samplerate=self.sample_rate, channels=2, dtype='int16', device=12)
+        recording = sd.rec(int((duration/2) * self.sample_rate), samplerate=self.sample_rate, channels=2, dtype='int16', device=12)
         sd.wait()  # Wait until the recording is finished
         write(filename, self.sample_rate, recording)
         print(f"Recording finished. Saved as {filename}.")
